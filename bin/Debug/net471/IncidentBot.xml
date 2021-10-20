@@ -1,0 +1,1277 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IncidentBot</name>
+    </assembly>
+    <members>
+        <member name="T:Sample.IncidentBot.Bot.Bot">
+            <summary>
+            The core bot logic.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Bot.Bot.NotificationPromptName">
+            <summary>
+            The prompt audio name for responder notification.
+            </summary>
+            <remarks>
+            message: "There is an incident occured. Press '1' to join the incident meeting. Press '0' to listen to the instruction again. ".
+            </remarks>
+        </member>
+        <member name="F:Sample.IncidentBot.Bot.Bot.TransferingPromptName">
+            <summary>
+            The prompt audio name for responder transfering.
+            </summary>
+            <remarks>
+            message: "Your call will be transferred to the incident meeting. Please don't hang off. ".
+            </remarks>
+        </member>
+        <member name="F:Sample.IncidentBot.Bot.Bot.BotIncomingPromptName">
+            <summary>
+            The prompt audio name for bot incoming calls.
+            </summary>
+            <remarks>
+            message: "You are calling an incident application. It's a sample for incoming call with audio prompt.".
+            </remarks>
+        </member>
+        <member name="F:Sample.IncidentBot.Bot.Bot.BotEndpointIncomingPromptName">
+            <summary>
+            The prompt audio name for bot endpoint incoming calls.
+            </summary>
+            <remarks>
+            message: "You are calling an incident application endpoint. It's a sample for incoming call with audio prompt.".
+            </remarks>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.#ctor(Sample.IncidentBot.Bot.BotOptions,Microsoft.Graph.Communications.Common.Telemetry.IGraphLogger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.Bot" /> class.
+            </summary>
+            <param name="options">The bot options.</param>
+            <param name="graphLogger">The graph logger.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.CallHandlers">
+            <summary>
+            Gets the collection of call handlers.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.MediaMap">
+            <summary>
+            Gets the prompts dictionary.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.BotInstanceUri">
+            <summary>
+            Gets the bots instance URI.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.Client">
+            <summary>
+            Gets the client.
+            </summary>
+            <value>
+            The client.
+            </value>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.OnlineMeetings">
+            <summary>
+            Gets the online meeting.
+            </summary>
+            <value>
+            The online meeting.
+            </value>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.Bot.IncidentStatusManager">
+            <summary>
+            Gets the incident manager.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.AddCallbackLog(System.String)">
+            <summary>
+            add callback log for diagnostics.
+            </summary>
+            <param name="message">the message.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.GetCallbackLogs(System.Int32)">
+            <summary>
+            get callback logs for diagnostics.
+            </summary>
+            <param name="maxCount">The maximum count of log lines.</param>
+            <returns>The log line.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.RaiseIncidentAsync(Sample.IncidentBot.Data.IncidentRequestData)">
+            <summary>
+            Raise an incident.
+            </summary>
+            <param name="incidentRequestData">The incident data.</param>
+            <returns>The task for await.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.JoinCallAsync(Sample.IncidentBot.Data.JoinCallRequestData,System.String)">
+            <summary>
+            Joins the call asynchronously.
+            </summary>
+            <param name="joinCallBody">The join call body.</param>
+            <param name="incidentId">Incident Id.</param>
+            <returns>The <see cref="T:Microsoft.Graph.Communications.Calls.ICall"/> that was requested to join.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.MakeCallAsync(Sample.IncidentBot.Data.MakeCallRequestData,System.Guid)">
+            <summary>
+            Makes outgoing call asynchronously.
+            </summary>
+            <param name="makeCallBody">The outgoing call request body.</param>
+            <param name="scenarioId">The scenario identifier.</param>
+            <returns>The <see cref="T:System.Threading.Tasks.Task"/>.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.AddParticipantAsync(System.String,Sample.IncidentBot.Data.AddParticipantRequestData)">
+            <summary>
+            Adds participants asynchronously.
+            </summary>
+            <param name="callLegId">which call to add participants.</param>
+            <param name="addParticipantBody">The add participant body.</param>
+            <returns>The <see cref="T:System.Threading.Tasks.Task"/>.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.TryDeleteCallAsync(System.String)">
+            <summary>
+            Try to end a particular call.
+            </summary>
+            <param name="callLegId">
+            The call leg id.
+            </param>
+            <returns>
+            The <see cref="T:System.Threading.Tasks.Task"/>.
+            </returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.CallsOnIncoming(Microsoft.Graph.Communications.Calls.ICallCollection,Microsoft.Graph.Communications.Resources.CollectionEventArgs{Microsoft.Graph.Communications.Calls.ICall})">
+            <summary>
+            Incoming call handler.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The <see cref="T:Microsoft.Graph.Communications.Resources.CollectionEventArgs`1"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.CallsOnUpdated(Microsoft.Graph.Communications.Calls.ICallCollection,Microsoft.Graph.Communications.Resources.CollectionEventArgs{Microsoft.Graph.Communications.Calls.ICall})">
+            <summary>
+            Updated call handler.
+            </summary>
+            <param name="sender">The <see cref="T:Microsoft.Graph.Communications.Calls.ICallCollection"/> sender.</param>
+            <param name="args">The <see cref="T:Microsoft.Graph.Communications.Resources.CollectionEventArgs`1"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.AddCallToHandlers(Microsoft.Graph.Communications.Calls.ICall,Sample.IncidentBot.Data.IncidentCallContext)">
+            <summary>
+            Add call to call handlers.
+            </summary>
+            <param name="call">The call to be added.</param>
+            <param name="incidentCallContext">The incident call context.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.GetHandlerOrThrow(System.String)">
+            <summary>
+            The get handler or throw.
+            </summary>
+            <param name="callLegId">
+            The call leg id.
+            </param>
+            <returns>
+            The <see cref="T:Sample.IncidentBot.Bot.ResponderCallHandler"/>.
+            </returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">
+            Throws an exception if handler is not found.
+            </exception>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.Bot.RehydrateAndValidateGroupCallAsync(Microsoft.Graph.Communications.Client.ICommunicationsClient,Microsoft.Graph.Communications.Calls.ICall)">
+            <summary>
+            Rehydrates and validates the group call.
+            </summary>
+            <param name="client">The communications client.</param>
+            <param name="call">The call to validate.</param>
+            <returns>The rehydrated call.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.CallAffinityMiddleware">
+            <summary>
+            The call affinity helper class to help re-route calls to specific web instance.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Bot.CallAffinityMiddleware.WebInstanceIdName">
+            <summary>
+            The name of web instance ID in query string.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Graph.Communications.Common.Telemetry.IGraphLogger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.CallAffinityMiddleware"/> class.
+            </summary>
+            <param name="next">The next request delegate.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.GetWebInstanceCallbackUri(System.Uri)">
+            <summary>
+            Get the web instance call back uri.
+            </summary>
+            <param name="baseUri">The base uri.</param>
+            <returns>The uri with current web instance id as query string.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            InvokeAsync of call affinity middleware class.
+            </summary>
+            <param name="httpContext">The http context.</param>
+            <returns>The task for await.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.GetCurrentWebInstanceId">
+            <summary>
+            Get the current web instance id.
+            </summary>
+            <returns>The current web instance id.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.IsToOtherWebInstance(System.String)">
+            <summary>
+            Check if current web instance is the target.
+            </summary>
+            <param name="instanceId">The web instance id.</param>
+            <returns>flag to incidate if other web instance is the target.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.SetQueryString(System.Uri,Microsoft.AspNetCore.Http.QueryString)">
+            <summary>
+            Set the query string.
+            </summary>
+            <param name="uri">The base Uri.</param>
+            <param name="queryString">The query string to add.</param>
+            <returns>The new Uri with base Uri and query string.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.GetWebInstanceId(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Get web instance ID.
+            </summary>
+            <param name="httpContext">The http context.</param>
+            <returns>The web instance ID in query string.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.GetRouteCounter(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Get route counter.
+            </summary>
+            <param name="httpContext">The http context.</param>
+            <returns>The route counter in query string. 0 if it is not presented.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallAffinityMiddleware.RerouteAsync(System.String,System.Int32,Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Re-route to the right web instance with the ARR affinity feature of Azure web site.
+            </summary>
+            <param name="instanceId">The web instance id.</param>
+            <param name="routeCounter">The route counter.</param>
+            <param name="httpContext">The http context.</param>
+            <returns>the task for await.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.CallHandler">
+            <summary>
+            Base class for call handler for event handling, logging and cleanup.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.#ctor(Sample.IncidentBot.Bot.Bot,Microsoft.Graph.Communications.Calls.ICall)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.CallHandler"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+            <param name="call">The call.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.CallHandler.Call">
+            <summary>
+            Gets the call interface.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.CallHandler.Bot">
+            <summary>
+            Gets the bot.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.HeartbeatAsync(System.Timers.ElapsedEventArgs)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.CallOnUpdated(Microsoft.Graph.Communications.Calls.ICall,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Call})">
+            <summary>
+            The event handler when call is updated.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.ParticipantsOnUpdated(Microsoft.Graph.Communications.Calls.IParticipantCollection,Microsoft.Graph.Communications.Resources.CollectionEventArgs{Microsoft.Graph.Communications.Calls.IParticipant})">
+            <summary>
+            The event handler when participants are updated.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.ParticipantOnUpdated(Microsoft.Graph.Communications.Calls.IParticipant,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Participant})">
+            <summary>
+            Event handler when participan is updated.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.OnCallUpdated(Microsoft.Graph.Communications.Calls.ICall,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Call})">
+            <summary>
+            Event handler for call updated.
+            </summary>
+            <param name="sender">The event sender.</param>
+            <param name="args">The event arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.OnParticipantUpdated(Microsoft.Graph.Communications.Calls.IParticipant,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Participant})">
+            <summary>
+            Event handler when participan is updated.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.CallHandler.OnParticipantsUpdated(Microsoft.Graph.Communications.Calls.IParticipantCollection,Microsoft.Graph.Communications.Resources.CollectionEventArgs{Microsoft.Graph.Communications.Calls.IParticipant})">
+            <summary>
+            The event handler when participants are updated.
+            </summary>
+            <param name="sender">The sender.</param>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.IncomingCallHandler">
+            <summary>
+            The call handler for incoming calls.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.IncomingCallHandler.#ctor(Sample.IncidentBot.Bot.Bot,Microsoft.Graph.Communications.Calls.ICall,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.IncomingCallHandler"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+            <param name="call">The call.</param>
+            <param name="endpointId">The bot endpoint id.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.IncomingCallHandler.CallOnUpdated(Microsoft.Graph.Communications.Calls.ICall,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Call})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.IncomingCallHandler.PlayNotificationPrompt">
+            <summary>
+            Play the notification prompt.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.MeetingCallHandler">
+            <summary>
+            The meeting call handler.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.MeetingCallHandler.#ctor(Sample.IncidentBot.Bot.Bot,Microsoft.Graph.Communications.Calls.ICall,Sample.IncidentBot.IncidentStatus.IncidentStatusData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.MeetingCallHandler"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+            <param name="call">The call.</param>
+            <param name="statusData">The incident status data.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.MeetingCallHandler.CallOnUpdated(Microsoft.Graph.Communications.Calls.ICall,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Call})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.MeetingCallHandler.ParticipantsOnUpdated(Microsoft.Graph.Communications.Calls.IParticipantCollection,Microsoft.Graph.Communications.Resources.CollectionEventArgs{Microsoft.Graph.Communications.Calls.IParticipant})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.MeetingCallHandler.ParticipantOnUpdated(Microsoft.Graph.Communications.Calls.IParticipant,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Participant})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.MeetingCallHandler.TryDeleteCall(System.String)">
+            <summary>
+            Try to delete a call.
+            </summary>
+            <param name="callId">The call which will be deleted.</param>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.ResponderCallHandler">
+            <summary>
+            The responder call handler class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.#ctor(Sample.IncidentBot.Bot.Bot,Microsoft.Graph.Communications.Calls.ICall,System.String,Sample.IncidentBot.IncidentStatus.IncidentStatusData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Bot.ResponderCallHandler"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+            <param name="call">The call.</param>
+            <param name="responderId">The responder id.</param>
+            <param name="statusData">The incident status data.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.CallOnUpdated(Microsoft.Graph.Communications.Calls.ICall,Microsoft.Graph.Communications.Resources.ResourceEventArgs{Microsoft.Graph.Call})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.PlayPromptAndTransferToMeeting">
+            <summary>
+            Play prompt and transfer to the incident meeting.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.SubscribeToTone">
+            <summary>
+            Subscribe to tone.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.PlayTransferingPromptAsync">
+            <summary>
+            Play the transfering prompt.
+            </summary>
+            <returns>
+            A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.
+            </returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.PlayNotificationPrompt">
+            <summary>
+            Play the notification prompt.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Bot.ResponderCallHandler.TransferToIncidentMeeting">
+            <summary>
+            add current responder to incident meeting as participant.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Bot.BotOptions">
+            <summary>
+            The bot options class.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.BotOptions.AppId">
+            <summary>
+            Gets or sets the application id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.BotOptions.AppSecret">
+            <summary>
+            Gets or sets the application secret.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.BotOptions.BotBaseUrl">
+            <summary>
+            Gets or sets the calls uri of the application.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Bot.BotOptions.PlaceCallEndpointUrl">
+            <summary>
+            Gets or sets the comms platform endpoint uri.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Http.AddParticipantController">
+            <summary>
+            AddParticipantController is a third-party controller (non-Bot Framework) that can be called to trigger a transfer.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.AddParticipantController.#ctor(Sample.IncidentBot.Bot.Bot)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Http.AddParticipantController"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.AddParticipantController.AddParticipantAsync(System.String,Sample.IncidentBot.Data.AddParticipantRequestData)">
+            <summary>
+            The add participants async.
+            </summary>
+            <param name="callLegId">
+            The call to add participants to.
+            </param>
+            <param name="addParticipantBody">
+            The add participant request body.
+            </param>
+            <returns>The action result.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Http.JoinCallController">
+            <summary>
+            JoinCallController is a third-party controller (non-Bot Framework) that can be called in CVI scenario to trigger the bot to join a call.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.JoinCallController.#ctor(Sample.IncidentBot.Bot.Bot)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Http.JoinCallController"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.JoinCallController.JoinCallAsync(Sample.IncidentBot.Data.JoinCallRequestData)">
+            <summary>
+            The join call async.
+            </summary>
+            <param name="joinCallBody">
+            The join call body.
+            </param>
+            <returns>
+            The action result.
+            </returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.JoinCallController.OnGetCalls">
+            <summary>
+            The on get calls.
+            </summary>
+            <returns>
+            The action result.
+            </returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.JoinCallController.OnEndCallAsync(System.String)">
+            <summary>
+            End the call.
+            </summary>
+            <param name="callLegId">
+            Id of the call to end.
+            </param>
+            <returns>
+            The action result.
+            </returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Http.MakeCallController">
+            <summary>
+              MakeCallController is a third-party controller (non-Bot Framework) that makes an outbound call to a target.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.MakeCallController.#ctor(Sample.IncidentBot.Bot.Bot)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Http.MakeCallController"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.MakeCallController.MakeOutgoingCallAsync(Sample.IncidentBot.Data.MakeCallRequestData)">
+            <summary>
+            The making outbound call async.
+            </summary>
+            <param name="makeCallBody">
+            The making outgoing call request body.
+            </param>
+            <returns>
+            The action result.
+            </returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Http.PlatformCallController">
+            <summary>
+            Entry point for handling call-related web hook requests from the stateful client.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.PlatformCallController.#ctor(Sample.IncidentBot.Bot.Bot)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Http.PlatformCallController"/> class.
+            </summary>
+            <param name="bot">The bot.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.PlatformCallController.OnIncomingRequestAsync">
+            <summary>
+            Handle a callback for an existing call.
+            </summary>
+            <returns>
+            The <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </returns>
+        </member>
+        <member name="M:Sample.IncidentBot.Http.PlatformCallController.GetCallbackLogsAsync(System.Int32)">
+            <summary>
+            Get the callback logs.
+            </summary>
+            <param name="maxCount">The maximum count of log lines.</param>
+            <returns>The logs.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Controllers.HomeController">
+            <summary>
+            The home controller class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Controllers.HomeController.Get">
+             <summary>
+             Get the default content of home page.
+             </summary>
+             <returns>Default content.</returns>
+            
+        </member>
+        <member name="T:Sample.IncidentBot.HttpRouteConstants">
+            <summary>
+            HTTP route constants for routing requests to CallController methods.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.CallbackPrefix">
+            <summary>
+            Route prefix for all incoming requests.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.OnIncomingRequestRoute">
+            <summary>
+            Route for incoming requests including notifications, callbacks and incoming call.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.OnJoinCallRoute">
+            <summary>
+            Route for join call request.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.OnMakeCallRoute">
+            <summary>
+            Route for making outgoing call request.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.CallsPrefix">
+            <summary>
+            The calls suffix.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.CallRoutePrefix">
+            <summary>
+            Route for getting Image for a call.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.OnAddParticipantRoute">
+            <summary>
+            Route for adding participants request.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.HttpRouteConstants.OnSubscribeToToneRoute">
+            <summary>
+            Route for subscribe to tone request.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.AddParticipantRequestData">
+            <summary>
+            The add participant request body.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.AddParticipantRequestData.ObjectId">
+            <summary>
+            Gets or sets the object id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.AddParticipantRequestData.ReplacesCallId">
+            <summary>
+            Gets or sets the replaces call identifier.
+            </summary>
+            <value>
+            The replaces call identifier.
+            </value>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.IncidentCallType">
+            <summary>
+            The incident call type.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Data.IncidentCallType.ResponderNotification">
+            <summary>
+            The call is a notification from the bot to a responder.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Data.IncidentCallType.BotMeeting">
+            <summary>
+            The call is from the bot to the incident meeting.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Data.IncidentCallType.BotIncoming">
+            <summary>
+            The call is an incoming call to the bot.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.Data.IncidentCallType.BotEndpointIncoming">
+            <summary>
+            The call is an incoming call to a bot endpoint.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.IncidentCallContext">
+            <summary>
+            The call context class to pass data with ICall.Resource.AppContext for async calls.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Data.IncidentCallContext.#ctor(Sample.IncidentBot.Data.IncidentCallType,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Data.IncidentCallContext"/> class.
+            </summary>
+            <param name="callType">The call type.</param>
+            <param name="incidentId">The incident Id.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentCallContext.CallType">
+            <summary>
+            Gets the call type.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentCallContext.IncidentId">
+            <summary>
+            Gets the incident id.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.IncidentRequestData">
+            <summary>
+            The incident request data.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentRequestData.Name">
+            <summary>
+            Gets or sets the incident name.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentRequestData.Time">
+            <summary>
+            Gets or sets the incident time.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentRequestData.ObjectIds">
+            <summary>
+            Gets or sets the user object ids.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.IncidentRequestData.ResponderType">
+            <summary>
+            Gets or sets a value indicating whether the responders are applications or users.
+            Value can be Application (For testing purpose) or User.
+            By default is User.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.JoinCallRequestData">
+            <summary>
+            The join call body.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.JoinCallRequestData.JoinURL">
+            <summary>
+            Gets or sets the join URL.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.JoinCallRequestData.VideoTeleconferenceId">
+            <summary>
+            Gets or sets the meeting identifier.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.JoinCallRequestData.TenantId">
+            <summary>
+            Gets or sets the tenant id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.JoinCallRequestData.ScenarioId">
+            <summary>
+            Gets or sets the scenario id.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.MakeCallRequestData">
+            <summary>
+            The outgoing call request body.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Data.MakeCallRequestData.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Data.MakeCallRequestData"/> class.
+            </summary>
+            <param name="tenantId">The tenant id.</param>
+            <param name="objectId">The user object id.</param>
+            <param name="isApplication">Whether the object is application.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Data.MakeCallRequestData.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Data.MakeCallRequestData"/> class.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MakeCallRequestData.TenantId">
+            <summary>
+            Gets or sets the tenant id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MakeCallRequestData.ObjectId">
+            <summary>
+            Gets or sets the object id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MakeCallRequestData.IsApplication">
+            <summary>
+            Gets or sets a value indicating whether the object is application.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.MeetingInfo">
+            <summary>
+            The meeting info class.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MeetingInfo.JoinURL">
+            <summary>
+            Gets or sets the join URL of the meeting.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MeetingInfo.RemoveFromDefaultRoutingGroup">
+            <summary>
+            Gets or sets a value indicating whether to remove the bot from default routing group.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MeetingInfo.AllowConversationWithoutHost">
+            <summary>
+            Gets or sets a value indicating whether to conversation without a host is allowed.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.Data.MeetingNowRequestData">
+            <summary>
+            The MeetingNow request data.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MeetingNowRequestData.TenantId">
+            <summary>
+            Gets or sets the tenant id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.Data.MeetingNowRequestData.OrganizerId">
+            <summary>
+            Gets or sets the organizer id.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.IncidentStatus.IncidentResponderMeetingStatus">
+            <summary>
+            The responder's meeting status.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentResponderMeetingStatus.Default">
+            <summary>
+            Default value
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentResponderMeetingStatus.Added">
+            <summary>
+            Added to the meeting
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentResponderMeetingStatus.Removed">
+            <summary>
+            Removed from the meeting
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData">
+            <summary>
+            The incident responder status data class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData"/> class.
+            </summary>
+            <param name="objectId">The responder's object id.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.ObjectId">
+            <summary>
+            Gets the responder's object id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.NotificationStatus">
+            <summary>
+            Gets or sets the notification status.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.MeetingStatus">
+            <summary>
+            Gets or sets the meeting status.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.NotificationCallId">
+            <summary>
+            Gets or sets the call id which called from bot.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.NotificationScenarioId">
+            <summary>
+            Gets or sets the scenario identifier which called from bot.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.MeetingCallId">
+            <summary>
+            Gets or sets the call id of the meeting leg to responder.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentResponderStatusData.MeetingScenarioId">
+            <summary>
+            Gets or sets the scenario identifier of the meeting leg to responder.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.IncidentStatus.IncidentStatus">
+            <summary>
+            The incident status.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentStatus.Default">
+            <summary>
+            Default value.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentStatus.RequestReceived">
+            <summary>
+            The incident request is received.
+            </summary>
+        </member>
+        <member name="F:Sample.IncidentBot.IncidentStatus.IncidentStatus.Resolved">
+            <summary>
+            The incident is resolved.
+            </summary>
+        </member>
+        <member name="T:Sample.IncidentBot.IncidentStatus.IncidentStatusData">
+            <summary>
+            The incident status data.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.#ctor(System.String,Sample.IncidentBot.Data.IncidentRequestData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.IncidentStatus.IncidentStatusData"/> class.
+            </summary>
+            <param name="id">The incident id.</param>
+            <param name="data">The incident data.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.#ctor(System.String,System.String,System.DateTime,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.IncidentStatus.IncidentStatusData"/> class.
+            </summary>
+            <param name="id">The incident id.</param>
+            <param name="name">The incident name.</param>
+            <param name="time">The time of incident.</param>
+            <param name="objectIds">The responders' object IDs.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.BotMeetingCallId">
+            <summary>
+            Gets the bot's meeting call id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.BotMeetingScenarioId">
+            <summary>
+            Gets the bot's meeting scenario identifier.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.IncidentStatus">
+            <summary>
+            Gets the incident status.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.BotMeetingStatus">
+            <summary>
+            Gets the bot meeting status.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.ResponderStatus">
+            <summary>
+            Gets the responder status.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.Id">
+            <summary>
+            Gets the incident id.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.Name">
+            <summary>
+            Gets the incident name.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.Time">
+            <summary>
+            Gets the incident time.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusData.DataCreationTime">
+            <summary>
+            Gets the incident data creation time.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateIncidentStatus(Sample.IncidentBot.IncidentStatus.IncidentStatus)">
+            <summary>
+            Update the incident status.
+            </summary>
+            <param name="status">The incident status.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateBotMeetingCallId(System.String,System.Guid)">
+            <summary>
+            Update the bot's meeting call id.
+            </summary>
+            <param name="callId">The call id.</param>
+            <param name="scenarioId">The scenario identifier.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateBotMeetingStatus(System.Nullable{Microsoft.Graph.CallState})">
+            <summary>
+            Update the bot meeting status.
+            </summary>
+            <param name="status">The meeting status.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateResponderNotificationCallId(System.String,System.String,System.Guid)">
+            <summary>
+            Update the responder's notificaiton call id.
+            </summary>
+            <param name="responderId">The responder id.</param>
+            <param name="callId">The call id.</param>
+            <param name="scenarioId">The scenario identifier.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateResponderMeetingCallId(System.String,System.String,System.Guid)">
+            <summary>
+            Update the responder's meeting call id.
+            </summary>
+            <param name="responderId">The responder id.</param>
+            <param name="callId">The call id.</param>
+            <param name="scenarioId">The scenario identifier.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateResponderNotificationStatus(System.String,System.Nullable{Microsoft.Graph.CallState})">
+            <summary>
+            Update the responder's notification status.
+            </summary>
+            <param name="responderId">The responder id.</param>
+            <param name="status">The notification status.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.UpdateResponderMeetingStatus(System.String,Sample.IncidentBot.IncidentStatus.IncidentResponderMeetingStatus)">
+            <summary>
+            Update the responder's meeting status.
+            </summary>
+            <param name="responderId">The responder id.</param>
+            <param name="status">The meeting status.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusData.GetResponder(System.String)">
+            <summary>
+            Get the responder's status.
+            </summary>
+            <param name="responderId">The responder id.</param>
+            <returns>The responder status.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.IncidentStatus.IncidentStatusManager">
+            <summary>
+            The incident status manager class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.IncidentStatus.IncidentStatusManager"/> class.
+            </summary>
+        </member>
+        <member name="P:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.IncidentCount">
+            <summary>
+            Gets the incident count.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.AddIncident(System.String,Sample.IncidentBot.IncidentStatus.IncidentStatusData)">
+            <summary>
+            Add an incident.
+            </summary>
+            <param name="id">The incident id.</param>
+            <param name="statusData">The incident status data.</param>
+            <returns>The incident data.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.RemoveIncident(System.String)">
+            <summary>
+            Remove an incident.
+            </summary>
+            <param name="id">The incident id.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.GetRecentIncidents(System.Int32)">
+            <summary>
+            Get most recent incidents based on the incident server time.
+            </summary>
+            <param name="maxCount">The maximum count in return data.</param>
+            <returns>The data collection of incidents in descending order.</returns>
+        </member>
+        <member name="M:Sample.IncidentBot.IncidentStatus.IncidentStatusManager.GetIncident(System.String)">
+            <summary>
+            Get an incident.
+            </summary>
+            <param name="id">The incident id.</param>
+            <returns>The incident data.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Program">
+            <summary>
+            The program class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Program.Main(System.String[])">
+            <summary>
+            The main function.
+            </summary>
+            <param name="args">The arguments.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Program.BuildWebHost(System.String[])">
+            <summary>
+            Build the web host.
+            </summary>
+            <param name="args">The arguments.</param>
+            <returns>The web host.</returns>
+        </member>
+        <member name="T:Sample.IncidentBot.Startup">
+            <summary>
+            Startup class.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sample.IncidentBot.Startup"/> class.
+            </summary>
+            <param name="configuration">The configuration interface.</param>
+        </member>
+        <member name="P:Sample.IncidentBot.Startup.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+        </member>
+        <member name="M:Sample.IncidentBot.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services">The service collection.</param>
+        </member>
+        <member name="M:Sample.IncidentBot.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app">The application builder.</param>
+            <param name="env">The hosting environment.</param>
+            <param name="loggerFactory">The logger of ILogger instance.</param>
+        </member>
+        <member name="T:IcMBot.Controllers.IncidentsController">
+            <summary>
+            The incidents controller class.
+            </summary>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.#ctor(Sample.IncidentBot.Bot.Bot,Sample.Common.Logging.SampleObserver)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IcMBot.Controllers.IncidentsController" /> class.
+            </summary>
+            <param name="bot">The bot.</param>
+            <param name="observer">The log observer.</param>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.PostIncidentAsync(Sample.IncidentBot.Data.IncidentRequestData)">
+            <summary>
+            Raise a incident.
+            </summary>
+            <param name="incidentRequestData">The incident data.</param>
+            <returns>The action result.</returns>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.GetRecentIncidentsAsync(System.Int32)">
+            <summary>
+            Gets a collection of incidents.
+            </summary>
+            <param name="maxCount">The maximum count of insidents in return values.</param>
+            <returns>The incident status collection.</returns>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.GetLogs(System.Int32,System.Int32)">
+            <summary>
+            Get the service logs.
+            </summary>
+            <param name="skip">Skip specified lines.</param>
+            <param name="take">Take specified lines.</param>
+            <returns>The logs.</returns>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.GetLogs(System.String,System.Int32,System.Int32)">
+            <summary>
+            Get the service logs.
+            </summary>
+            <param name="filter">The filter.</param>
+            <param name="skip">Skip specified lines.</param>
+            <param name="take">Take specified lines.</param>
+            <returns>
+            The logs.
+            </returns>
+        </member>
+        <member name="M:IcMBot.Controllers.IncidentsController.AddRefreshHeader(System.Int32)">
+            <summary>
+            Add refresh headers for browsers to download content.
+            </summary>
+            <param name="seconds">Refresh rate.</param>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions">
+            <summary>
+            The azure ad service collection extensions class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.AddAzureAdBearer(Microsoft.AspNetCore.Authentication.AuthenticationBuilder)">
+            <summary>
+            Add azure ad bearer feature.
+            </summary>
+            <param name="builder">The authentication builder.</param>
+            <returns>The updated authentication builder.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.AddAzureAdBearer(Microsoft.AspNetCore.Authentication.AuthenticationBuilder,System.Action{Microsoft.AspNetCore.Authentication.AzureAdOptions})">
+            <summary>
+            Add azure ad bearer feature.
+            </summary>
+            <param name="builder">The authentication builder.</param>
+            <param name="configureOptions">The configuration options.</param>
+            <returns>The updated authentication builder.</returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.ConfigureAzureOptions">
+            <summary>
+            The inner class for configuration Azure options.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.ConfigureAzureOptions.#ctor(Microsoft.Extensions.Options.IOptions{Microsoft.AspNetCore.Authentication.AzureAdOptions})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.ConfigureAzureOptions"/> class.
+            </summary>
+            <param name="azureOptions">The Azure option.</param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.ConfigureAzureOptions.Configure(System.String,Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions)">
+            <summary>
+            Configure the options.
+            </summary>
+            <param name="name">The name of options.</param>
+            <param name="options">The options.</param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Authentication.AzureAdAuthenticationBuilderExtensions.ConfigureAzureOptions.Configure(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerOptions)">
+            <summary>
+            Configure the options.
+            </summary>
+            <param name="options">The options.</param>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Authentication.AzureAdOptions">
+            <summary>
+            The Azure AD options class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Authentication.AzureAdOptions.AppId">
+            <summary>
+            Gets or sets the application id as auth client id.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Authentication.AzureAdOptions.AppSecret">
+            <summary>
+            Gets or sets the application secret as auth client secret.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Authentication.AzureAdOptions.Instance">
+            <summary>
+            Gets or sets the instance.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Authentication.AzureAdOptions.Domain">
+            <summary>
+            Gets or sets the domain.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Authentication.AzureAdOptions.TenantId">
+            <summary>
+            Gets or sets the tenant id.
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.ControllerExtensions">
+            <summary>
+            The controller exceptions.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ControllerExtensions.GetActionResultAsync(Microsoft.AspNetCore.Mvc.Controller,System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Convert the status code, content of HttpResponseMessage to IActionResult,
+            and copy the headers from response to HttpContext.Response.Headers.
+            </summary>
+            <param name="controller">The HttpResponse instance.</param>
+            <param name="responseMessage">The HTtpResponseMessage instance.</param>
+            <returns>The action result.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ControllerExtensions.Exception(Microsoft.AspNetCore.Mvc.Controller,System.Exception)">
+            <summary>
+            Convert exception to action result.
+            </summary>
+            <param name="controller">The controller.</param>
+            <param name="exception">The exception.</param>
+            <returns>The action result.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.ControllerExtensions.CopyResponseHeaders(Microsoft.AspNetCore.Mvc.Controller,System.Net.Http.Headers.HttpResponseHeaders)">
+            <summary>
+            Copy the response headers to controller.HttpContext.Response.
+            </summary>
+            <param name="controller">The controller.</param>
+            <param name="responseHeaders">The response headers.</param>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.BotBuilderExtensions">
+            <summary>
+            The bot builder extensions class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.BotBuilderExtensions.AddBot(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add bot feature.
+            </summary>
+            <param name="services">The service collection.</param>
+            <returns>The updated service collection.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.BotBuilderExtensions.AddBot(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Sample.IncidentBot.Bot.BotOptions})">
+            <summary>
+            Add bot feature.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="botOptionsAction">The action for bot options.</param>
+            <returns>The updated service collection.</returns>
+        </member>
+    </members>
+</doc>
